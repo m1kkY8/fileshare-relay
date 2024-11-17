@@ -1,13 +1,13 @@
 package main
 
 import (
-	"fileshare-relay/src/entity"
+	"fileshare-relay/src/server"
 	"log"
 	"net"
 )
 
 func main() {
-	server := entity.NewServer()
+	server := server.NewServer()
 	listener, err := net.Listen("tcp", "0.0.0.0:9001")
 	if err != nil {
 		log.Printf("err starting server %v", err)

@@ -1,4 +1,4 @@
-package entity
+package handshake
 
 import (
 	"net"
