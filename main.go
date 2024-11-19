@@ -20,6 +20,7 @@ func main() {
 			continue
 		}
 
-		go server.HandleConnection(conn)
+		var fileSize int64
+		go server.HandleConnection(conn, &fileSize)
 	}
 }
