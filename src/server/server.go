@@ -64,6 +64,8 @@ func (server *Server) HandleConnection(conn net.Conn, fileSize *int64) {
 
 				delete(server.Receivers, handshake)
 				delete(server.Receivers, hs)
+				defer conn.Close()
+				defer c.Close()
 			}
 		}
 
@@ -73,12 +75,15 @@ func (server *Server) HandleConnection(conn net.Conn, fileSize *int64) {
 
 // mock funkcija da simulira neki transfer i prekid konekcije
 func (server *Server) Transfer(conn1 net.Conn, conn2 net.Conn, fileSize int64) {
-	_, err := io.CopyN(conn1, conn2, fileSize)
-	if err != nil {
-		log.Printf("error writing to conn %v", err)
-		return
+	for {
+		_, err := io.CopyN(conn1, conn2, fileSize)
+		if err != nil {
+			if err == io.EOF {
+				log.Println("reached EOF")
+				break
+			}
+			log.Printf("error writing to conn %v", err)
+			return
+		}
 	}
-
-	defer conn1.Close()
-	defer conn2.Close()
 }
